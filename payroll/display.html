@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payroll Display</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #404040;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      border: 4px solid black;
+      border-radius: 25px;
+      padding: 30px 80px;
+      width: 600px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 30px;
+    }
+
+    .info, .deductions {
+      font-size: 20px;
+      line-height: 1.8;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .center {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .total, .net {
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 25px;
+      font-size: 20px;
+      font-weight: bold;
+      border: 3px solid black;
+      border-radius: 10px;
+      background-color: #e6e6e6;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background-color: #d1d1d1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PAYROLL PROGRAM</h1>
+    <div class="info">
+      <div class="center"><span class="label">ID:</span> <span id="idNum"></span></div>
+      <div class="center"><span class="label">NAME:</span> <span id="empName"></span></div>
+      <div class="center"><span class="label">POSITION:</span> <span id="empPosition"></span></div>
+      <br>
+      <div class="center"><span class="label">RATE:</span> <span id="empRate"></span></div>
+      <div class="center"><span class="label">DAYS:</span> <span id="empDays"></span></div>
+      <br>
+      <div class="center total"><span>GROSS PAY:</span> <span id="grossPay"></span></div>
+    </div>
+
+    <div class="deductions">
+      <div class="total" style="text-align:center;">DEDUCTIONS</div>
+      <div class="center"><span>SSS(5%):</span><span id="sss"></span></div>
+      <div class="center"><span>PAG-IBIG(3%):</span><span id="pagibig"></span></div>
+      <div class="center"><span>PHILHEALTH(2%):</span><span id="philhealth"></span></div>
+      <div class="center"><span>TAX(5%):</span><span id="tax"></span></div>
+      <br>
+      <div class="center total"><span>TOTAL DEDUCTION:</span><span id="totalDeduction"></span></div>
+      <br>
+      <div class="center net"><span>NET PAY:</span><span id="netPay"></span></div>
+    </div>
+
+    <button class="back-btn" onclick="goBack()">BACK</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "index.html";
+    }
+
+    const data = JSON.parse(localStorage.getItem("payrollData"));
+    if (data) {
+      const gross = data.rate * data.days;
+      const sss = gross * 0.05;
+      const pagibig = gross * 0.03;
+      const philhealth = gross * 0.02;
+      const tax = gross * 0.05;
+      const totalDeduction = sss + pagibig + philhealth + tax;
+      const netPay = gross - totalDeduction;
+
+      document.getElementById("idNum").textContent = data.idNumber;
+      document.getElementById("empName").textContent = `${data.lastName}, ${data.firstName} ${data.middleName.charAt(0)}.`;
+      document.getElementById("empPosition").textContent = data.position;
+      document.getElementById("empRate").textContent = data.rate;
+      document.getElementById("empDays").textContent = data.days;
+      document.getElementById("grossPay").textContent = gross.toFixed(2);
+
+      document.getElementById("sss").textContent = sss.toFixed(2);
+      document.getElementById("pagibig").textContent = pagibig.toFixed(2);
+      document.getElementById("philhealth").textContent = philhealth.toFixed(2);
+      document.getElementById("tax").textContent = tax.toFixed(2);
+      document.getElementById("totalDeduction").textContent = totalDeduction.toFixed(2);
+      document.getElementById("netPay").textContent = netPay.toFixed(2);
+    }
+  </script>
+</body>
+</html>
